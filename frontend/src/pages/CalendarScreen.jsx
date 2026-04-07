@@ -32,7 +32,7 @@ export default function CalendarScreen() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/events/');
+      const res = await fetch('/api/events/');
       if (res.ok) {
         const data = await res.json();
         const formattedEvents = data.map(ev => ({
@@ -56,7 +56,7 @@ export default function CalendarScreen() {
   const handleUploadFile = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch('http://localhost:8000/api/upload', {
+    const res = await fetch('/api/upload', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
@@ -77,7 +77,7 @@ export default function CalendarScreen() {
         imageUrl = await handleUploadFile(imageFile);
       }
 
-      const res = await fetch('http://localhost:8000/api/events/', {
+      const res = await fetch('/api/events/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

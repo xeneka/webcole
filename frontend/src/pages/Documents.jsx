@@ -17,7 +17,7 @@ export default function Documents() {
 
   const fetchDocuments = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/documents/');
+      const res = await fetch('/api/documents/');
       if (res.ok) {
         const data = await res.json();
         setDocuments(data);
@@ -36,7 +36,7 @@ export default function Documents() {
   const handleUploadFile = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch('http://localhost:8000/api/upload', {
+    const res = await fetch('/api/upload', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
@@ -60,7 +60,7 @@ export default function Documents() {
         imageUrl = await handleUploadFile(imageFile);
       }
 
-      const res = await fetch('http://localhost:8000/api/documents/', {
+      const res = await fetch('/api/documents/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

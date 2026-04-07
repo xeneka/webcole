@@ -17,7 +17,7 @@ export default function News() {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/posts/');
+      const res = await fetch('/api/posts/');
       if (res.ok) {
         const data = await res.json();
         setPosts(data);
@@ -36,7 +36,7 @@ export default function News() {
   const handleUploadFile = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-    const res = await fetch('http://localhost:8000/api/upload', {
+    const res = await fetch('/api/upload', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: formData
@@ -57,7 +57,7 @@ export default function News() {
         finalImageUrl = await handleUploadFile(imageFile);
       }
 
-      const res = await fetch('http://localhost:8000/api/posts/', {
+      const res = await fetch('/api/posts/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

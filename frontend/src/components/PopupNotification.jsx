@@ -15,7 +15,7 @@ export default function PopupNotification() {
   // Fetch logic
   const fetchPopup = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/popup/');
+      const res = await fetch('/api/popup/');
       if (res.ok) {
         const data = await res.json();
         setPopupData(data);
@@ -43,7 +43,7 @@ export default function PopupNotification() {
   const handleSaveAdmin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:8000/api/popup/', {
+      const res = await fetch('/api/popup/', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export default function PopupNotification() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const response = await fetch("http://localhost:8000/api/upload", {
+      const response = await fetch("/api/upload", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
