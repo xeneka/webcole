@@ -12,7 +12,6 @@ services:
     volumes:
       - backend_uploads:/app/uploads
     networks:
-      - internal_net
       - easypanel_net
 
   frontend:
@@ -24,14 +23,12 @@ services:
     depends_on:
       - backend
     networks:
-      - internal_net
       - easypanel_net
 
 volumes:
   backend_uploads:
 
 networks:
-  internal_net:
   easypanel_net:
     # Esto une este proyecto a la misma red general que usa Easypanel,
     # permitiendo que nuestro backend encuentre a la base de datos externa.
