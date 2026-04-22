@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+from pathlib import Path
 import sys
 import os
 
@@ -11,10 +13,8 @@ from app.infrastructure.database.connection import engine, SessionLocal
 from app.infrastructure.database import models
 from app.core import security
 
-# Create DB Tables
 models.Base.metadata.create_all(bind=engine)
 
-# Create admin user if it doesn't exist
 db = SessionLocal()
 admin_user = db.query(models.DBUser).filter(models.DBUser.username == "admin").first()
 if not admin_user:
@@ -28,7 +28,7 @@ app = FastAPI(title="CEIP San Isidro API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # For development
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,6 +39,11 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 app.include_router(router, prefix="/api")
 
-@app.get("/")
-def health_check():
-    return {"status": "ok", "message": "Backend CEIP San Isidro en ejecución"}
+FRONTEND_DIST = Path(__file__).parent / "frontend_dist"
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_react(full_path: str):
+    file = FRONTEND_DIST / full_path
+    if file.is_file():
+        return FileResponse(file)
+    return FileResponse(FRONTEND_DIST / "index.html")

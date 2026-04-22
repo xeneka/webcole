@@ -1,41 +1,29 @@
 services:
-  backend:
+  app:
     build:
-      context: ./backend
+      context: .
+      dockerfile: Dockerfile
     restart: always
     environment:
       - DATABASE_URL=postgres://postgres:-Lucano2030@bd_database:5432/bd?sslmode=disable
     expose:
       - "8000"
     volumes:
-      - backend_uploads:/app/uploads
+      - app_uploads:/app/uploads
     networks:
       easypanel_net:
         aliases:
-          - backend
-
-  frontend:
-    build:
-      context: ./frontend
-    restart: always
-    expose:
-      - "80"
-    depends_on:
-      - backend
-    networks:
-      easypanel_net:
-        aliases:
-          - frontend
+          - app
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=easypanel"
       - "traefik.http.routers.bd-webcole.rule=Host(`bd-webcole.kmluyu.easypanel.host`)"
       - "traefik.http.routers.bd-webcole.entrypoints=websecure"
       - "traefik.http.routers.bd-webcole.tls=true"
-      - "traefik.http.services.bd-webcole.loadbalancer.server.port=80"
+      - "traefik.http.services.bd-webcole.loadbalancer.server.port=8000"
 
 volumes:
-  backend_uploads:
+  app_uploads:
 
 networks:
   easypanel_net:
