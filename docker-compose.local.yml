@@ -4,7 +4,7 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: -Lucano2030
+      POSTGRES_PASSWORD: Lucano2030
       POSTGRES_DB: bd
     ports:
       - "5432:5432"
@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     environment:
-      - DATABASE_URL=postgres://postgres:-Lucano2030@bd_database:5432/bd?sslmode=disable
+      - DATABASE_URL=postgres://postgres:Lucano2030@bd_database:5432/bd?sslmode=disable
     ports:
       - "8000:8000"
     volumes:

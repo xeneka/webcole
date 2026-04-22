@@ -1,15 +1,31 @@
 services:
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Lucano2030
+      POSTGRES_DB: bd
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      easypanel_net:
+        aliases:
+          - postgres
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: always
     environment:
-      - DATABASE_URL=postgres://postgres:-Lucano2030@bd_database:5432/bd?sslmode=disable
+      - DATABASE_URL=postgres://postgres:Lucano2030@postgres:5432/bd?sslmode=disable
     expose:
       - "8000"
     volumes:
       - app_uploads:/app/uploads
+    depends_on:
+      - postgres
     networks:
       easypanel_net:
         aliases:
@@ -24,6 +40,7 @@ services:
 
 volumes:
   app_uploads:
+  postgres_data:
 
 networks:
   easypanel_net:
