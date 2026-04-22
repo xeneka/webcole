@@ -26,6 +26,13 @@ services:
       easypanel_net:
         aliases:
           - frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=easypanel"
+      - "traefik.http.routers.bd-webcole.rule=Host(`bd-webcole.kmluyu.easypanel.host`)"
+      - "traefik.http.routers.bd-webcole.entrypoints=websecure"
+      - "traefik.http.routers.bd-webcole.tls=true"
+      - "traefik.http.services.bd-webcole.loadbalancer.server.port=80"
 
 volumes:
   backend_uploads:
