@@ -39,10 +39,10 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=easypanel"
-      - "traefik.http.routers.bd-webcole.rule=Host(`bd-webcole.kmluyu.easypanel.host`)"
-      - "traefik.http.routers.bd-webcole.entrypoints=websecure"
-      - "traefik.http.routers.bd-webcole.tls=true"
-      - "traefik.http.services.bd-webcole.loadbalancer.server.port=8000"
+      - "traefik.http.routers.webcole-web.rule=Host(`webcole-web.kmluyu.easypanel.host`)"
+      - "traefik.http.routers.webcole-web.entrypoints=websecure"
+      - "traefik.http.routers.webcole-web.tls=true"
+      - "traefik.http.services.webcole-web.loadbalancer.server.port=8000"
 
 volumes:
   app_uploads:
