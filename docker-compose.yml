@@ -12,6 +12,11 @@ services:
       easypanel_net:
         aliases:
           - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bd"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   app:
     build:
@@ -25,7 +30,8 @@ services:
     volumes:
       - app_uploads:/app/uploads
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       easypanel_net:
         aliases:
