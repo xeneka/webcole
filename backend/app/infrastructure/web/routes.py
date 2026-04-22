@@ -82,7 +82,7 @@ def upload_file(file: UploadFile = File(...), current_user = Depends(get_current
         shutil.copyfileobj(file.file, file_object)
     
     # Return URL format compatible with frontend
-    return {"url": f"http://localhost:8000/uploads/{unique_filename}"}
+    return {"url": f"/uploads/{unique_filename}"}
 
 # --- POST ROUTES ---
 @router.post("/posts/", response_model=Post)

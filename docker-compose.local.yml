@@ -1,0 +1,37 @@
+services:
+  bd_database:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: -Lucano2030
+      POSTGRES_DB: bd
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_local:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgres://postgres:-Lucano2030@bd_database:5432/bd?sslmode=disable
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      - bd_database
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data_local:
