@@ -41,8 +41,9 @@ app.include_router(router, prefix="/api")
 
 FRONTEND_DIST = Path(__file__).parent / "frontend_dist"
 
+@app.get("/", include_in_schema=False)
 @app.get("/{full_path:path}", include_in_schema=False)
-async def serve_react(full_path: str):
+async def serve_react(full_path: str = ""):
     file = FRONTEND_DIST / full_path
     if file.is_file():
         return FileResponse(file)
