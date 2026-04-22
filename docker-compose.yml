@@ -1,52 +1,20 @@
 services:
-  postgres:
-    image: postgres:15-alpine
+  web:
+    image: nginx:alpine
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Lucano2030
-      POSTGRES_DB: bd
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      easypanel_net:
-        aliases:
-          - postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d bd"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
-    environment:
-      - DATABASE_URL=postgres://postgres:Lucano2030@postgres:5432/bd?sslmode=disable
     expose:
-      - "8000"
-    volumes:
-      - app_uploads:/app/uploads
-    depends_on:
-      postgres:
-        condition: service_healthy
+      - "80"
     networks:
       easypanel_net:
         aliases:
-          - app
+          - web
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=easypanel"
       - "traefik.http.routers.webcole-web.rule=Host(`webcole-web.kmluyu.easypanel.host`)"
       - "traefik.http.routers.webcole-web.entrypoints=websecure"
       - "traefik.http.routers.webcole-web.tls=true"
-      - "traefik.http.services.webcole-web.loadbalancer.server.port=8000"
-
-volumes:
-  app_uploads:
-  postgres_data:
+      - "traefik.http.services.webcole-web.loadbalancer.server.port=80"
 
 networks:
   easypanel_net:
