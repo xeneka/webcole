@@ -15,11 +15,14 @@ from app.core import security
 
 models.Base.metadata.create_all(bind=engine)
 
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
+
 db = SessionLocal()
-admin_user = db.query(models.DBUser).filter(models.DBUser.username == "admin").first()
+admin_user = db.query(models.DBUser).filter(models.DBUser.username == ADMIN_USERNAME).first()
 if not admin_user:
-    hashed_pw = security.get_password_hash("admin123")
-    new_admin = models.DBUser(username="admin", hashed_password=hashed_pw)
+    hashed_pw = security.get_password_hash(ADMIN_PASSWORD)
+    new_admin = models.DBUser(username=ADMIN_USERNAME, hashed_password=hashed_pw)
     db.add(new_admin)
     db.commit()
 db.close()
