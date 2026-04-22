@@ -4,15 +4,15 @@ services:
       context: ./backend
     restart: always
     environment:
-      # Conecta directamente a la base de datos alojada en Easypanel
       - DATABASE_URL=postgres://postgres:-Lucano2030@bd_database:5432/bd?sslmode=disable
     expose:
-      # Usamos 'expose' para no causar colisión de puertos en el host de Easypanel
       - "8000"
     volumes:
       - backend_uploads:/app/uploads
     networks:
-      - easypanel_net
+      easypanel_net:
+        aliases:
+          - backend
 
   frontend:
     build:
@@ -23,21 +23,14 @@ services:
     depends_on:
       - backend
     networks:
-      - easypanel_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.bd-webcole.rule=Host(`bd-webcole.kmluyu.easypanel.host`)"
-      - "traefik.http.routers.bd-webcole.entrypoints=websecure"
-      - "traefik.http.routers.bd-webcole.tls.certresolver=letsencrypt"
-      - "traefik.http.services.bd-webcole.loadbalancer.server.port=80"
-      - "traefik.docker.network=easypanel"
+      easypanel_net:
+        aliases:
+          - frontend
 
 volumes:
   backend_uploads:
 
 networks:
   easypanel_net:
-    # Esto une este proyecto a la misma red general que usa Easypanel,
-    # permitiendo que nuestro backend encuentre a la base de datos externa.
     name: easypanel
     external: true
