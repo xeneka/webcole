@@ -8,10 +8,6 @@ services:
       POSTGRES_DB: bd
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      easypanel_net:
-        aliases:
-          - postgres
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d bd"]
       interval: 5s
@@ -32,16 +28,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      easypanel_net:
-        aliases:
-          - app
 
 volumes:
   app_uploads:
   postgres_data:
-
-networks:
-  easypanel_net:
-    name: easypanel
-    external: true
