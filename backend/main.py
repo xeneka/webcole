@@ -19,7 +19,7 @@ models.Base.metadata.create_all(bind=engine)
 # Add is_active column if it doesn't exist (migration for existing DBs)
 with engine.connect() as conn:
     try:
-        conn.execute(text("ALTER TABLE posts ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT 1"))
+        conn.execute(text("ALTER TABLE posts ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE"))
         conn.commit()
     except Exception:
         pass
