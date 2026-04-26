@@ -12,7 +12,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
 from app.infrastructure.database.connection import get_db
 from app.infrastructure.database.repository import PostRepository, DocumentRepository, UserRepository, EventRepository, PopupRepository
 from app.application.use_cases import PostService, DocumentService, AuthService, EventService, PopupService
-from app.domain.models import Post, PostCreate, CenterDocument, CenterDocumentCreate, Token, Event, EventCreate, Popup, PopupUpdate
+from app.domain.models import Post, PostCreate, PostUpdate, CenterDocument, CenterDocumentCreate, Token, Event, EventCreate, Popup, PopupUpdate
 from app.core import security
 
 router = APIRouter()
@@ -92,6 +92,19 @@ def create_post(post: PostCreate, service: PostService = Depends(get_post_servic
 @router.get("/posts/", response_model=List[Post])
 def list_posts(service: PostService = Depends(get_post_service)):
     return service.get_all_posts()
+
+@router.put("/posts/{post_id}", response_model=Post)
+def update_post(post_id: int, post_update: PostUpdate, service: PostService = Depends(get_post_service), current_user = Depends(get_current_user)):
+    post = service.update_post(post_id, post_update)
+    if not post:
+        raise HTTPException(status_code=404, detail="Noticia no encontrada")
+    return post
+
+@router.delete("/posts/{post_id}")
+def delete_post(post_id: int, service: PostService = Depends(get_post_service), current_user = Depends(get_current_user)):
+    if not service.delete_post(post_id):
+        raise HTTPException(status_code=404, detail="Noticia no encontrada")
+    return {"ok": True}
 
 # --- DOCUMENT ROUTES ---
 @router.post("/documents/", response_model=CenterDocument)

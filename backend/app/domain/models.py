@@ -11,8 +11,16 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
+class PostUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    image_url: Optional[str] = None
+    video_url: Optional[str] = None
+    is_active: Optional[bool] = None
+
 class Post(PostBase):
     id: int
+    is_active: bool = True
     created_at: datetime
 
     class Config:

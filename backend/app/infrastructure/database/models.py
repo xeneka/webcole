@@ -12,6 +12,7 @@ class DBPost(Base):
     content = Column(Text)
     image_url = Column(String(500), nullable=True)
     video_url = Column(String(500), nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False, server_default="1")
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class DBDocument(Base):

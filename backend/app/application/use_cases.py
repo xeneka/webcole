@@ -11,9 +11,15 @@ class PostService:
         
     def create_post(self, post_data: PostCreate):
         return self.repo.create(post_data)
-        
+
     def get_all_posts(self):
         return self.repo.list_all()
+
+    def delete_post(self, post_id: int) -> bool:
+        return self.repo.delete(post_id)
+
+    def update_post(self, post_id: int, post_update):
+        return self.repo.update(post_id, post_update)
 
 class DocumentService:
     def __init__(self, repository):

@@ -8,12 +8,21 @@ import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+from sqlalchemy import text
 from app.infrastructure.web.routes import router
 from app.infrastructure.database.connection import engine, SessionLocal
 from app.infrastructure.database import models
 from app.core import security
 
 models.Base.metadata.create_all(bind=engine)
+
+# Add is_active column if it doesn't exist (migration for existing DBs)
+with engine.connect() as conn:
+    try:
+        conn.execute(text("ALTER TABLE posts ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT 1"))
+        conn.commit()
+    except Exception:
+        pass
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
