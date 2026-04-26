@@ -35,8 +35,16 @@ class CenterDocumentBase(BaseModel):
 class CenterDocumentCreate(CenterDocumentBase):
     pass
 
+class CenterDocumentUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    image_url: Optional[str] = None
+    file_url: Optional[str] = None
+    is_active: Optional[bool] = None
+
 class CenterDocument(CenterDocumentBase):
     id: int
+    is_active: bool = True
     created_at: datetime
 
     class Config:

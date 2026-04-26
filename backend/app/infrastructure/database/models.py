@@ -22,6 +22,7 @@ class DBDocument(Base):
     description = Column(Text)
     image_url = Column(String(500), nullable=True)
     file_url = Column(String(500), nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False, server_default="true")
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class DBUser(Base):

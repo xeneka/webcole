@@ -31,6 +31,12 @@ class DocumentService:
     def get_all_documents(self):
         return self.repo.list_all()
 
+    def delete_document(self, doc_id: int) -> bool:
+        return self.repo.delete(doc_id)
+
+    def update_document(self, doc_id: int, doc_update):
+        return self.repo.update(doc_id, doc_update)
+
 class AuthService:
     def __init__(self, repository):
         self.repo = repository

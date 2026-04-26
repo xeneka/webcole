@@ -12,7 +12,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
 from app.infrastructure.database.connection import get_db
 from app.infrastructure.database.repository import PostRepository, DocumentRepository, UserRepository, EventRepository, PopupRepository
 from app.application.use_cases import PostService, DocumentService, AuthService, EventService, PopupService
-from app.domain.models import Post, PostCreate, PostUpdate, CenterDocument, CenterDocumentCreate, Token, Event, EventCreate, Popup, PopupUpdate
+from app.domain.models import Post, PostCreate, PostUpdate, CenterDocument, CenterDocumentCreate, CenterDocumentUpdate, Token, Event, EventCreate, Popup, PopupUpdate
 from app.core import security
 
 router = APIRouter()
@@ -114,6 +114,19 @@ def create_document(doc: CenterDocumentCreate, service: DocumentService = Depend
 @router.get("/documents/", response_model=List[CenterDocument])
 def list_documents(service: DocumentService = Depends(get_document_service)):
     return service.get_all_documents()
+
+@router.put("/documents/{doc_id}", response_model=CenterDocument)
+def update_document(doc_id: int, doc_update: CenterDocumentUpdate, service: DocumentService = Depends(get_document_service), current_user = Depends(get_current_user)):
+    doc = service.update_document(doc_id, doc_update)
+    if not doc:
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    return doc
+
+@router.delete("/documents/{doc_id}")
+def delete_document(doc_id: int, service: DocumentService = Depends(get_document_service), current_user = Depends(get_current_user)):
+    if not service.delete_document(doc_id):
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    return {"ok": True}
 
 # --- EVENT ROUTES ---
 @router.post("/events/", response_model=Event)

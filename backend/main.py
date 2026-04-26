@@ -16,13 +16,14 @@ from app.core import security
 
 models.Base.metadata.create_all(bind=engine)
 
-# Add is_active column if it doesn't exist (migration for existing DBs)
+# Add is_active columns if they don't exist (migration for existing DBs)
 with engine.connect() as conn:
-    try:
-        conn.execute(text("ALTER TABLE posts ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE"))
-        conn.commit()
-    except Exception:
-        pass
+    for table in ("posts", "documents"):
+        try:
+            conn.execute(text(f"ALTER TABLE {table} ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE"))
+            conn.commit()
+        except Exception:
+            pass
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")

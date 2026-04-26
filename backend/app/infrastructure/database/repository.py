@@ -3,7 +3,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from app.domain.models import PostCreate, PostUpdate, CenterDocumentCreate, EventCreate, PopupUpdate
+from app.domain.models import PostCreate, PostUpdate, CenterDocumentCreate, CenterDocumentUpdate, EventCreate, PopupUpdate
 from app.infrastructure.database.models import DBPost, DBDocument, DBUser, DBEvent, DBPopup
 
 class PostRepository:
@@ -54,6 +54,27 @@ class DocumentRepository:
 
     def list_all(self):
         return self.db.query(DBDocument).order_by(DBDocument.created_at.desc()).all()
+
+    def get_by_id(self, doc_id: int):
+        return self.db.query(DBDocument).filter(DBDocument.id == doc_id).first()
+
+    def delete(self, doc_id: int) -> bool:
+        doc = self.get_by_id(doc_id)
+        if not doc:
+            return False
+        self.db.delete(doc)
+        self.db.commit()
+        return True
+
+    def update(self, doc_id: int, doc_update: CenterDocumentUpdate):
+        doc = self.get_by_id(doc_id)
+        if not doc:
+            return None
+        for key, value in doc_update.model_dump(exclude_unset=True).items():
+            setattr(doc, key, value)
+        self.db.commit()
+        self.db.refresh(doc)
+        return doc
 
 class UserRepository:
     def __init__(self, db_session: Session):
