@@ -23,7 +23,7 @@ with engine.connect() as conn:
             conn.execute(text(f"ALTER TABLE {table} ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE"))
             conn.commit()
         except Exception:
-            pass
+            conn.rollback()
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
