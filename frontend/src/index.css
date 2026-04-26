@@ -119,6 +119,58 @@ h1, h2, h3, h4, h5, h6 {
   .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
 }
 
+/* Navbar responsive */
+.navbar-desktop {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.navbar-hamburger {
+  display: none;
+}
+
+.navbar-mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.navbar-mobile-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  padding: 0.85rem 0.5rem;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  transition: background 0.15s;
+}
+
+.navbar-mobile-link:hover {
+  background: rgba(59, 130, 246, 0.07);
+}
+
+@media (max-width: 767px) {
+  .navbar-desktop {
+    display: none;
+  }
+
+  .navbar-hamburger {
+    display: block;
+  }
+
+  .navbar-title {
+    font-size: 1rem !important;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+}
+
 /* React Big Calendar Overrides */
 .rbc-calendar {
   border: none !important;
